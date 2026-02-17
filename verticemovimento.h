@@ -2,7 +2,7 @@
 #define VERTICEMOVIMENTO_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include "vertici.h"
 
 /*

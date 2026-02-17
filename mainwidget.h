@@ -1,8 +1,8 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QtGui>
-#include <QtOpenGL>
+#include <QtWidgets>
+#include <QOpenGLFunctions>
 #include "gldisegno.h"
 #include "strumenti.h"
 #include "colori.h"

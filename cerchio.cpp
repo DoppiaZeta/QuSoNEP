@@ -1,4 +1,5 @@
 #include "cerchio.h"
+#include <cmath>
 
 Cerchio::Cerchio() {
    immagine = GLOBAL::CERCHIO;
@@ -16,7 +17,7 @@ void Cerchio::disegnaPoligono(int profondita) const {
    QList<xypos> listaVertici;
    int xdistanza = vertici[0].getX() - vertici[1].getX();
    int ydistanza = vertici[0].getY() - vertici[1].getY();
-   int distanza = qRound(sqrt(static_cast<long double>(xdistanza * xdistanza + ydistanza * ydistanza)));
+   int distanza = qRound(std::sqrt(static_cast<double>(xdistanza * xdistanza + ydistanza * ydistanza)));
    for(int i = 0; i < 360; i++)
       listaVertici.push_back(xypos(vertici[0].getX() + distanza * MathClass::degSine(i),
                                    vertici[0].getY() + distanza * MathClass::degCosine(i)
@@ -86,11 +87,11 @@ void Cerchio::setTipo(tipoCerchio t) {
 bool Cerchio::rayCasting(int x, int y) const {
    int xdistanza = vertici[0].getX() - vertici[1].getX();
    int ydistanza = vertici[0].getY() - vertici[1].getY();
-   int raggio = qRound(sqrt(static_cast<long double>(xdistanza * xdistanza + ydistanza * ydistanza)));
+   int raggio = qRound(std::sqrt(static_cast<double>(xdistanza * xdistanza + ydistanza * ydistanza)));
 
    xdistanza = vertici[0].getX() - x;
    ydistanza = vertici[0].getY() - y;
-   int mouseRaggio = qRound(sqrt(static_cast<long double>(xdistanza * xdistanza + ydistanza * ydistanza)));
+   int mouseRaggio = qRound(std::sqrt(static_cast<double>(xdistanza * xdistanza + ydistanza * ydistanza)));
 
    if(mouseRaggio <= raggio)
       return true;

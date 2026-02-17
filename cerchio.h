@@ -2,7 +2,7 @@
 #define CERCHIO_H
 
 #include <QtCore>
-#include <QtOpenGL>
+#include <QOpenGLFunctions>
 #include "mathclass.h"
 #include "figuraastratta.h"
 #include "global.h"

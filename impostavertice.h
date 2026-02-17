@@ -2,7 +2,7 @@
 #define IMPOSTAVERTICE_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include "vertici.h"
 #include "colori.h"
 

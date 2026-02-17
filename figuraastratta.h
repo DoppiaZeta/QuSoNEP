@@ -2,7 +2,7 @@
 #define FIGURAASTRATTA_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include <math.h>
 #include "vertici.h"
 #include "global.h"

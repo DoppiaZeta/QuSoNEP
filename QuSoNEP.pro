@@ -1,6 +1,8 @@
 # -------------------------------------------------
 # Project created by QtCreator 2009-02-25T16:46:49
 # -------------------------------------------------
+QT += widgets
+QT += openglwidgets
 QT += opengl
 QT += sql
 TARGET = QuSoNEP

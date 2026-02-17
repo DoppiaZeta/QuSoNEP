@@ -2,7 +2,7 @@
 #define SELEZIONA_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include "figuraastratta.h"
 #include "strumenti.h"
 #include "global.h"

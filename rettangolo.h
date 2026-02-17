@@ -2,7 +2,7 @@
 #define RETTANGOLO_H
 
 #include <QtCore>
-#include <QtOpenGL>
+#include <QOpenGLFunctions>
 #include "figuraastratta.h"
 #include "global.h"
 

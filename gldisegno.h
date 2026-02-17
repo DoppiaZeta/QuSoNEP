@@ -2,8 +2,9 @@
 #define GLDISEGNO_H
 
 #include <QtCore>
-#include <QtGui>
-#include <QtOpenGL>
+#include <QtWidgets>
+#include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 #include <QtSql>
 #include "figuraastratta.h"
 #include "vertici.h"
@@ -31,7 +32,7 @@
   iteragisce con l'utente tramite il click del mouse.
 */
 
-class GLDisegno : public QGLWidget {
+class GLDisegno : public QOpenGLWidget {
    Q_OBJECT
    public:
       GLDisegno();

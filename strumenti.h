@@ -1,7 +1,7 @@
 #ifndef STRUMENTI_H
 #define STRUMENTI_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 #include "global.h"
 

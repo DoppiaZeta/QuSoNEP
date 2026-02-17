@@ -1,5 +1,15 @@
 #include "contavertici.h"
 
+namespace {
+QPoint mousePoint(const QMouseEvent *evento) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+   return evento->position().toPoint();
+#else
+   return evento->pos();
+#endif
+}
+}
+
 Contavertici::Contavertici() {
    coordinate = 0;
    setFixedHeight(50);
@@ -45,8 +55,8 @@ void Contavertici::paintEvent(QPaintEvent *event) {
 }
 
 void Contavertici::mouseReleaseEvent(QMouseEvent * evento) {
-   int x = evento->x();
-   int y = evento->y();
+   int x = mousePoint(evento).x();
+   int y = mousePoint(evento).y();
    x -= xoffset;
    y -= yoffset;
    int i = x / 80;

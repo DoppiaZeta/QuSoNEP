@@ -1,7 +1,7 @@
 #ifndef COLORI_H
 #define COLORI_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QtCore>
 
 /*

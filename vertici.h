@@ -2,8 +2,8 @@
 #define VERTICI_H
 
 #include <QtCore>
-#include <QtGui>
-#include <QtOpenGL>
+#include <QtWidgets>
+#include <QOpenGLFunctions>
 
 /*
   Classe Vertice

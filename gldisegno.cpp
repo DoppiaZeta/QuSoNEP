@@ -1,5 +1,16 @@
 #include "gldisegno.h"
 
+
+namespace {
+QPoint mousePoint(const QMouseEvent *evento) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+   return evento->position().toPoint();
+#else
+   return evento->pos();
+#endif
+}
+}
+
 GLDisegno::GLDisegno() {
    coloreAttuale = QColor(255, 255, 0);
    verticeInMovimento = 0;
@@ -24,27 +35,27 @@ void GLDisegno::mouseMoveEvent(QMouseEvent * evento) {
    i--;
 
    if(verticeInMovimento) {
-      if(evento->x() > 0 && evento->x() < width())
-         verticeInMovimento->setX(evento->x());
-      if(evento->y() > 0 && evento->y() < height())
-         verticeInMovimento->setY(height() - evento->y());
+      if(mousePoint(evento).x() > 0 && mousePoint(evento).x() < width())
+         verticeInMovimento->setX(mousePoint(evento).x());
+      if(mousePoint(evento).y() > 0 && mousePoint(evento).y() < height())
+         verticeInMovimento->setY(height() - mousePoint(evento).y());
       if(centro)
          centro->operator=(figure[i]->verticeMedia());
-      updateGL();
+      update();
    } else if(centro) {
       int x = centro->getX();
       int y = centro->getY();
-      if(evento->x() > 0 && evento->x() < width())
-         centro->setX(evento->x());
-      if(evento->y() > 0 && evento->y() < height())
-         centro->setY(height() - evento->y());
+      if(mousePoint(evento).x() > 0 && mousePoint(evento).x() < width())
+         centro->setX(mousePoint(evento).x());
+      if(mousePoint(evento).y() > 0 && mousePoint(evento).y() < height())
+         centro->setY(height() - mousePoint(evento).y());
       x = centro->getX() - x;
       y = centro->getY() - y;
       for(QList<Vertice>::iterator it = figure[i]->primoVertice(); it != figure[i]->ultimoVertice(); it++) {
          it->setX(it->getX() + x);
          it->setY(it->getY() + y);
       }
-      updateGL();
+      update();
 
    }
 }
@@ -58,22 +69,22 @@ void GLDisegno::mousePressEvent(QMouseEvent * evento) {
    if(attivaRayCasting) {
       bool trovato = false;
       for(int i = 0; i < figure.size() && !trovato; i++)
-         if(figure[i]->rayCasting(evento->x(), height() - evento->y())) {
+         if(figure[i]->rayCasting(mousePoint(evento).x(), height() - mousePoint(evento).y())) {
             trovato = true;
             figure[i]->setSelezionato(true);
             attivaRayCasting = false;
-            updateGL();
+            update();
          }
    } else {
       if(!verticeInMovimento) {
          bool trovato = false;
          for(int i = 0; i < figure.size() && !trovato; i++)
             if(figure[i]->getSelezionato())
-               trovato = figure[i]->collisioneVertice(evento->x(),
-                                                      height() - evento->y(),
+               trovato = figure[i]->collisioneVertice(mousePoint(evento).x(),
+                                                      height() - mousePoint(evento).y(),
                                                       verticeInMovimento
                                                       );
-         if(centro && centro->collisione(evento->x(), height() - evento->y()))
+         if(centro && centro->collisione(mousePoint(evento).x(), height() - mousePoint(evento).y()))
             verticeInMovimento = 0;
       }
 
@@ -82,7 +93,7 @@ void GLDisegno::mousePressEvent(QMouseEvent * evento) {
          selezionato = figure[i]->getSelezionato();
 
       if(prendiCoordinate && !verticeInMovimento && !selezionato) {
-         Vertice v(evento->x(), height() - evento->y());
+         Vertice v(mousePoint(evento).x(), height() - mousePoint(evento).y());
          v.setColore(coloreAttuale);
          coordinate.push_back(v);
 
@@ -113,7 +124,7 @@ void GLDisegno::mousePressEvent(QMouseEvent * evento) {
             figure.push_front(f);
             connect(f, SIGNAL(lampeggia()), SLOT(ridisegna()));
          }
-         updateGL();
+         update();
          emit coordinateAggiornate(&coordinate);
       }
    }
@@ -125,8 +136,8 @@ void GLDisegno::mouseDoubleClickEvent(QMouseEvent * evento) {
    bool trovato = false;
    for(int i = 0; i < figure.size() && !trovato; i++)
       if(figure[i]->getSelezionato())
-         trovato = figure[i]->collisioneVertice(evento->x(),
-                                                height() - evento->y(),
+         trovato = figure[i]->collisioneVertice(mousePoint(evento).x(),
+                                                height() - mousePoint(evento).y(),
                                                 v
                                                 );
 
@@ -138,11 +149,11 @@ void GLDisegno::mouseDoubleClickEvent(QMouseEvent * evento) {
 }
 
 void GLDisegno::ridisegna() {
-   updateGL();
+   update();
 }
 
 void GLDisegno::initializeGL() {
-   qglClearColor(coloreSfondo);
+   glClearColor(coloreSfondo.redF(), coloreSfondo.greenF(), coloreSfondo.blueF(), coloreSfondo.alphaF());
    glEnable(GL_DEPTH_TEST);
    glEnable(GL_BLEND);
    glEnable(GL_LINE_SMOOTH);
@@ -158,7 +169,7 @@ void GLDisegno::resizeGL(int w, int h) {
 
 void GLDisegno::paintGL() {
    resizeGL(width(), height());
-   qglClearColor(coloreSfondo);
+   glClearColor(coloreSfondo.redF(), coloreSfondo.greenF(), coloreSfondo.blueF(), coloreSfondo.alphaF());
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
@@ -183,7 +194,6 @@ void GLDisegno::paintGL() {
    if(centro)
       centro->disegna(maxprofondita + 2);
 
-   swapBuffers();
 }
 
 QColor GLDisegno::getColoreAttuale() const {
@@ -221,7 +231,7 @@ void GLDisegno::chiudiPercorso() {
    figure.push_front(f);
    connect(f, SIGNAL(lampeggia()), SLOT(ridisegna()));
 
-   updateGL();
+   update();
    emit coordinateAggiornate(&coordinate);
 }
 
@@ -229,7 +239,7 @@ void GLDisegno::deseleziona() {
    for(int i = 0; i < figure.size(); i++)
       figure[i]->setSelezionato(false);
    attivaRayCasting = false;
-   updateGL();
+   update();
 }
 
 void GLDisegno::attivaSelezione() {
@@ -252,7 +262,7 @@ void GLDisegno::premiTasto(QKeyEvent * evento) {
       if(centro)
          delete centro;
       centro = new VerticeMovimento(figure[i - 1]->verticeMedia());
-      updateGL();
+      update();
    }
 }
 
@@ -260,13 +270,13 @@ void GLDisegno::rilasciaTasto(QKeyEvent * evento) {
    if(centro && evento->key() == Qt::Key_Shift) {
       delete centro;
       centro = 0;
-      updateGL();
+      update();
    }
 }
 
 void GLDisegno::cambiaSfondo(const QColor & c) {
    coloreSfondo = c;
-   updateGL();
+   update();
 }
 
 void GLDisegno::finestraColoreSfondo() {
@@ -467,7 +477,7 @@ void GLDisegno::apri() {
       coloreSfondo.setBlue(q.value(0).toInt());
 
       db.close();
-      updateGL();
+      update();
    }
 }
 
