@@ -1,0 +1,25 @@
+# Qt
+*.pro.user*
+*.qmake.stash
+Makefile
+moc_*
+qrc_*
+ui_*
+
+# Build
+build/
+debug/
+release/
+*.o
+*.a
+*.so
+*.dll
+*.exe
+
+# Binari
+QuSoNEP
+
+# OS
+*~
+.DS_Store
+Thumbs.db
