@@ -5,6 +5,9 @@ QT += widgets
 QT += openglwidgets
 QT += opengl
 QT += sql
+
+win32:LIBS += -lopengl32
+
 TARGET = QuSoNEP
 TEMPLATE = app
 SOURCES += main.cpp \
@@ -81,4 +84,3 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/AndroidManifest.xml \
     android/version.xml
-
